@@ -3,15 +3,6 @@
 """
 Launch a calculation using the 'general-MD' plugin
 
-# $ diff file1.txt file2.txt > diff.patch
-
-The launch.py script sets up an AiiDA AbstractCode instance that 
-associates the /usr/bin/diff executable with the DiffCalculation class 
-(through its entry point diff).
-This code is automatically set on the code input port of the builder and 
-passed as an input to the calculation plugin.
-
-https://aiida.readthedocs.io/projects/aiida-core/en/v2.2.2/howto/plugin_codes.html
 """
 
 import os
@@ -183,7 +174,10 @@ def launch_generalMD(code, command, inputs, outputs, output_dir):
 
     # print(inputs_)
     # Submit your calculation to the aiida daemon
+    #process = MyAppCalculation(**inputs_)
+    #process.label = 'test'
     future = engine.submit(CalculationFactory('general-MD'), **inputs_)
+    #future = engine.submit(process)
     print(f"Submitted calculation {future}\n")
 
 

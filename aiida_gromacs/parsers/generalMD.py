@@ -6,17 +6,6 @@ from aiida.plugins import CalculationFactory
 import re
 import os
 
-# import pathlib
-# from pathlib import Path
-# cwd = os.getcwd()
-# output_dir = cwd+'/outputs/'
-# Path(output_dir).mkdir(parents=True, exist_ok=True)
-
-# INPUT_DIR = Path(__file__).resolve().parent
-# OUTPUT_PATH = '/outputs/'
-# PATH = str(INPUT_DIR)+OUTPUT_PATH
-# Path(PATH).mkdir(parents=True, exist_ok=True)
-
 # entry point string under which the parser class is registered:
 GeneralCalculation = CalculationFactory('general-MD') 
 

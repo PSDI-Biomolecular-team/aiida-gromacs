@@ -83,6 +83,7 @@ class GeneralCalculation(CalcJob):
         
         # ensure code is set
         spec.inputs['code'].required = True
+
         
         # IMPORTANT: 
         # Use spec.outputs.dynamic = True to make the entire output namespace 
@@ -146,8 +147,10 @@ class GeneralCalculation(CalcJob):
 
 
         
-        # not sure if the command string needs to be split?
+        # split strings in command
         codeinfo.cmdline_params = str(self.inputs.command.value).split()
+        if self.inputs.code.label == 'bash':
+            codeinfo.cmdline_params = ['-c', self.inputs.command.value]
 
         # and the UUID of the AbstractCode to run:
         codeinfo.code_uuid = self.inputs.code.uuid
