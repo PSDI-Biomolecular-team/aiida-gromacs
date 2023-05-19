@@ -6,13 +6,14 @@ Register data types via the "aiida.data" entry point in setup.json.
 
 # You can directly use or subclass aiida.orm.data.Data
 # or any other data type listed under 'verdi data'
-from voluptuous import Schema, Optional, Required
+from voluptuous import Optional, Required, Schema
+
 from aiida.orm import Dict
 
-# A subset of diff's command line options
+# A subset of grompp command line options
 cmdline_options = {
-    Required('o', default='ions.tpr'): str,
-    Optional('r'): str,
+    Required("o", default="ions.tpr"): str,
+    Optional("r"): str,
 }
 
 
@@ -41,7 +42,7 @@ class GromppParameters(Dict):  # pylint: disable=too-many-ancestors
         dict = self.validate(dict)
         super().__init__(dict=dict, **kwargs)
 
-    def validate(self, parameters_dict):  # pylint: disable=no-self-use
+    def validate(self, parameters_dict):
         """Validate command line options.
 
         Uses the voluptuous package for validation. Find out about allowed keys using::
@@ -65,16 +66,15 @@ class GromppParameters(Dict):  # pylint: disable=too-many-ancestors
         """
         parameters = []
 
-        parameters.append('grompp')
-        parameters.extend(['-f', mdpfile])
-        parameters.extend(['-c', grofile])
-        parameters.extend(['-p', topfile])
+        parameters.append("grompp")
+        parameters.extend(["-f", mdpfile])
+        parameters.extend(["-c", grofile])
+        parameters.extend(["-p", topfile])
 
         parm_dict = self.get_dict()
 
-        for k in parm_dict.keys():
-
-            parameters.extend(['-' + k, parm_dict[k]])
+        for key, value in parm_dict.items():
+            parameters.extend(["-" + key, value])
 
         return [str(p) for p in parameters]
 
@@ -88,5 +88,5 @@ class GromppParameters(Dict):  # pylint: disable=too-many-ancestors
 
         """
         string = super().__str__()
-        string += '\n' + str(self.get_dict())
+        string += "\n" + str(self.get_dict())
         return string

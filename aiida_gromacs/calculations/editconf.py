@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-EditconfParameters = DataFactory('gromacs.editconf')
+EditconfParameters = DataFactory("gromacs.editconf")
 
 
 class EditconfCalculation(CalcJob):
@@ -35,7 +35,7 @@ class EditconfCalculation(CalcJob):
         spec.input('parameters', valid_type=EditconfParameters, help='Command line parameters for gmx editconf.')
 
         spec.output('stdout', valid_type=SinglefileData, help='stdout')
-        spec.output('grofile', valid_type=SinglefileData, help='Output file containing simulation box.')    
+        spec.output('grofile', valid_type=SinglefileData, help='Output file containing simulation box.')
 
         spec.exit_code(300, 'ERROR_MISSING_OUTPUT_FILES', message='Calculation did not produce all expected output files.')
 
@@ -49,7 +49,8 @@ class EditconfCalculation(CalcJob):
         """
         codeinfo = CodeInfo()
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
-            grofile=self.inputs.grofile.filename)
+            grofile=self.inputs.grofile.filename
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -58,9 +59,15 @@ class EditconfCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.grofile.uuid, self.inputs.grofile.filename, self.inputs.grofile.filename),
+            (
+                self.inputs.grofile.uuid,
+                self.inputs.grofile.filename,
+                self.inputs.grofile.filename,
+            ),
         ]
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['o']]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["o"],
+        ]
 
         return calcinfo

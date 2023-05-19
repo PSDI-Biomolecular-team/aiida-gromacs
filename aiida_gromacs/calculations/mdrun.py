@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-MdrunParameters = DataFactory('gromacs.mdrun')
+MdrunParameters = DataFactory("gromacs.mdrun")
 
 
 class MdrunCalculation(CalcJob):
@@ -17,6 +17,7 @@ class MdrunCalculation(CalcJob):
 
     AiiDA plugin wrapper for converting PDB files to GRO files.
     """
+
     @classmethod
     def define(cls, spec):
         """Define inputs and outputs of the calculation."""
@@ -57,7 +58,8 @@ class MdrunCalculation(CalcJob):
         """
         codeinfo = CodeInfo()
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
-            tprfile=self.inputs.tprfile.filename)
+            tprfile=self.inputs.tprfile.filename
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -66,16 +68,22 @@ class MdrunCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.tprfile.uuid, self.inputs.tprfile.filename, self.inputs.tprfile.filename),
+            (
+                self.inputs.tprfile.uuid,
+                self.inputs.tprfile.filename,
+                self.inputs.tprfile.filename,
+            ),
         ]
 
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['c'],
-                                  self.inputs.parameters['e'],
-                                  self.inputs.parameters['g'],
-                                  self.inputs.parameters['o']]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["c"],
+            self.inputs.parameters["e"],
+            self.inputs.parameters["g"],
+            self.inputs.parameters["o"],
+        ]
 
-        if 'cpo' in self.inputs.parameters.keys():
-            calcinfo.retrieve_list.append(self.inputs.parameters['cpo'])
+        if "cpo" in self.inputs.parameters.keys():
+            calcinfo.retrieve_list.append(self.inputs.parameters["cpo"])
 
         return calcinfo

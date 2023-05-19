@@ -6,97 +6,120 @@ A workflow for setting up basic molecular dynamics simulations.
 from aiida.engine import ToContext, WorkChain
 from aiida.orm import Code, SinglefileData
 from aiida.plugins.factories import CalculationFactory, DataFactory
+
 from aiida_gromacs import helpers
 
-Pdb2gmxCalculation = CalculationFactory('gromacs.pdb2gmx')
-EditconfCalculation = CalculationFactory('gromacs.editconf')
-SolvateCalculation = CalculationFactory('gromacs.solvate')
-GromppCalculation = CalculationFactory('gromacs.grompp')
-GenionCalculation = CalculationFactory('gromacs.genion')
-MdrunCalculation = CalculationFactory('gromacs.mdrun')
+Pdb2gmxCalculation = CalculationFactory("gromacs.pdb2gmx")
+EditconfCalculation = CalculationFactory("gromacs.editconf")
+SolvateCalculation = CalculationFactory("gromacs.solvate")
+GromppCalculation = CalculationFactory("gromacs.grompp")
+GenionCalculation = CalculationFactory("gromacs.genion")
+MdrunCalculation = CalculationFactory("gromacs.mdrun")
 
-Pdb2gmxParameters = DataFactory('gromacs.pdb2gmx')
-EditconfParameters = DataFactory('gromacs.editconf')
-SolvateParameters = DataFactory('gromacs.solvate')
-GromppParameters = DataFactory('gromacs.grompp')
-GenionParameters = DataFactory('gromacs.genion')
-MdrunParameters = DataFactory('gromacs.mdrun')
+Pdb2gmxParameters = DataFactory("gromacs.pdb2gmx")
+EditconfParameters = DataFactory("gromacs.editconf")
+SolvateParameters = DataFactory("gromacs.solvate")
+GromppParameters = DataFactory("gromacs.grompp")
+GenionParameters = DataFactory("gromacs.genion")
+MdrunParameters = DataFactory("gromacs.mdrun")
 
 
 class SetupWorkChain(WorkChain):
     """WorkChain for setting up a gromacs simulation automatically."""
+
     @classmethod
     def define(cls, spec):
         """Specify workflow recipe."""
         super().define(spec)
-        spec.input('local_code', valid_type=Code)
-        spec.input('remote_code', required=False, valid_type=Code)
-        spec.input('pdbfile',
-                   valid_type=SinglefileData,
-                   help='Input structure.')
-        spec.input('ionsmdp',
-                   valid_type=SinglefileData,
-                   help='MD parameters for adding ions.')
-        spec.input('minmdp',
-                   valid_type=SinglefileData,
-                   help='MD parameters for minimisation.')
-        spec.input('nvtmdp',
-                   valid_type=SinglefileData,
-                   help='MD parameters for NVT equilibration.')
-        spec.input('nptmdp',
-                   valid_type=SinglefileData,
-                   help='MD parameters for NPT equilibration.')
-        spec.input('prodmdp',
-                   valid_type=SinglefileData,
-                   help='MD parameters for production run.')
-        spec.input('pdb2gmxparameters',
-                   valid_type=Pdb2gmxParameters,
-                   help='Command line parameters for gmx pdb2gmx')
-        spec.input('editconfparameters',
-                   valid_type=EditconfParameters,
-                   help='Command line parameters for gmx editconf')
-        spec.input('solvateparameters',
-                   valid_type=SolvateParameters,
-                   help='Command line parameters for gmx solvate')
-        spec.input('gromppionsparameters',
-                   valid_type=GromppParameters,
-                   help='Command line parameters for gmx grompp')
-        spec.input('genionparameters',
-                   valid_type=GenionParameters,
-                   help='Command line parameters for gmx genion')
+        spec.input("local_code", valid_type=Code)
+        spec.input("remote_code", required=False, valid_type=Code)
+        spec.input("pdbfile", valid_type=SinglefileData, help="Input structure.")
         spec.input(
-            'gromppminparameters',
-            valid_type=GromppParameters,
-            help='Command line parameters for gmx grompp minimisation run')
-        spec.input(
-            'minimiseparameters',
-            valid_type=MdrunParameters,
-            help='Command line parameters for gmx mdrun minimisation run')
-        spec.input(
-            'gromppnvtparameters',
-            valid_type=GromppParameters,
-            help='Command line parameters for gmx grompp nvt equilibration run'
+            "ionsmdp", valid_type=SinglefileData, help="MD parameters for adding ions."
         )
         spec.input(
-            'nvtparameters',
-            valid_type=MdrunParameters,
-            help='Command line parameters for gmx mdrun nvt equilibration run')
-        spec.input(
-            'gromppnptparameters',
-            valid_type=GromppParameters,
-            help='Command line parameters for gmx grompp npt equilibration run'
+            "minmdp", valid_type=SinglefileData, help="MD parameters for minimisation."
         )
         spec.input(
-            'nptparameters',
-            valid_type=MdrunParameters,
-            help='Command line parameters for gmx mdrun npt equilibration run')
+            "nvtmdp",
+            valid_type=SinglefileData,
+            help="MD parameters for NVT equilibration.",
+        )
         spec.input(
-            'gromppprodparameters',
+            "nptmdp",
+            valid_type=SinglefileData,
+            help="MD parameters for NPT equilibration.",
+        )
+        spec.input(
+            "prodmdp",
+            valid_type=SinglefileData,
+            help="MD parameters for production run.",
+        )
+        spec.input(
+            "pdb2gmxparameters",
+            valid_type=Pdb2gmxParameters,
+            help="Command line parameters for gmx pdb2gmx",
+        )
+        spec.input(
+            "editconfparameters",
+            valid_type=EditconfParameters,
+            help="Command line parameters for gmx editconf",
+        )
+        spec.input(
+            "solvateparameters",
+            valid_type=SolvateParameters,
+            help="Command line parameters for gmx solvate",
+        )
+        spec.input(
+            "gromppionsparameters",
             valid_type=GromppParameters,
-            help='Command line parameters for gmx grompp production run')
-        spec.input('mdrunparameters',
-                   valid_type=MdrunParameters,
-                   help='Command line parameters for gmx mdrun production run')
+            help="Command line parameters for gmx grompp",
+        )
+        spec.input(
+            "genionparameters",
+            valid_type=GenionParameters,
+            help="Command line parameters for gmx genion",
+        )
+        spec.input(
+            "gromppminparameters",
+            valid_type=GromppParameters,
+            help="Command line parameters for gmx grompp minimisation run",
+        )
+        spec.input(
+            "minimiseparameters",
+            valid_type=MdrunParameters,
+            help="Command line parameters for gmx mdrun minimisation run",
+        )
+        spec.input(
+            "gromppnvtparameters",
+            valid_type=GromppParameters,
+            help="Command line parameters for gmx grompp nvt equilibration run",
+        )
+        spec.input(
+            "nvtparameters",
+            valid_type=MdrunParameters,
+            help="Command line parameters for gmx mdrun nvt equilibration run",
+        )
+        spec.input(
+            "gromppnptparameters",
+            valid_type=GromppParameters,
+            help="Command line parameters for gmx grompp npt equilibration run",
+        )
+        spec.input(
+            "nptparameters",
+            valid_type=MdrunParameters,
+            help="Command line parameters for gmx mdrun npt equilibration run",
+        )
+        spec.input(
+            "gromppprodparameters",
+            valid_type=GromppParameters,
+            help="Command line parameters for gmx grompp production run",
+        )
+        spec.input(
+            "mdrunparameters",
+            valid_type=MdrunParameters,
+            help="Command line parameters for gmx mdrun production run",
+        )
 
         spec.outline(
             cls.pdb2gmx,
@@ -115,16 +138,16 @@ class SetupWorkChain(WorkChain):
             cls.result,
         )
 
-        spec.output('result')
+        spec.output("result")
 
     def pdb2gmx(self):
         """Convert PDB file to forcefield compliant GRO file"""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.pdb2gmxparameters,
-            'pdbfile': self.inputs.pdbfile,
-            'metadata': {
-                'description': 'convert pdb file to gromacs gro format.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.pdb2gmxparameters,
+            "pdbfile": self.inputs.pdbfile,
+            "metadata": {
+                "description": "convert pdb file to gromacs gro format.",
             },
         }
 
@@ -136,11 +159,11 @@ class SetupWorkChain(WorkChain):
         """Add simulation box to GRO file."""
 
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.editconfparameters,
-            'grofile': self.ctx.pdb2gmx.outputs.grofile,
-            'metadata': {
-                'description': 'add simulation box parameters to gro file.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.editconfparameters,
+            "grofile": self.ctx.pdb2gmx.outputs.grofile,
+            "metadata": {
+                "description": "add simulation box parameters to gro file.",
             },
         }
 
@@ -151,12 +174,12 @@ class SetupWorkChain(WorkChain):
     def solvate(self):
         """Add solvent to GRO file."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.solvateparameters,
-            'grofile': self.ctx.editconf.outputs.grofile,
-            'topfile': self.ctx.pdb2gmx.outputs.topfile,
-            'metadata': {
-                'description': 'add solvent to simulation box.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.solvateparameters,
+            "grofile": self.ctx.editconf.outputs.grofile,
+            "topfile": self.ctx.pdb2gmx.outputs.topfile,
+            "metadata": {
+                "description": "add solvent to simulation box.",
             },
         }
 
@@ -167,13 +190,13 @@ class SetupWorkChain(WorkChain):
     def gromppions(self):
         """Create a tpr for adding ions."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.gromppionsparameters,
-            'mdpfile': self.inputs.ionsmdp,
-            'grofile': self.ctx.solvate.outputs.grofile,
-            'topfile': self.ctx.solvate.outputs.topfile,
-            'metadata': {
-                'description': 'prepare the tpr for adding ions.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.gromppionsparameters,
+            "mdpfile": self.inputs.ionsmdp,
+            "grofile": self.ctx.solvate.outputs.grofile,
+            "topfile": self.ctx.solvate.outputs.topfile,
+            "metadata": {
+                "description": "prepare the tpr for adding ions.",
             },
         }
 
@@ -184,16 +207,16 @@ class SetupWorkChain(WorkChain):
     def genion(self):
         """Add ions to system to balance charge."""
 
-        #Sort this out.
+        # Sort this out.
         computer = helpers.get_computer()
-        gromacs_code = helpers.get_code(entry_point='bash', computer=computer)
+        gromacs_code = helpers.get_code(entry_point="bash", computer=computer)
         inputs = {
-            'code': gromacs_code,
-            'parameters': self.inputs.genionparameters,
-            'tprfile': self.ctx.gromppions.outputs.tprfile,
-            'topfile': self.ctx.solvate.outputs.topfile,
-            'metadata': {
-                'description': 'add ions to simulation box.',
+            "code": gromacs_code,
+            "parameters": self.inputs.genionparameters,
+            "tprfile": self.ctx.gromppions.outputs.tprfile,
+            "topfile": self.ctx.solvate.outputs.topfile,
+            "metadata": {
+                "description": "add ions to simulation box.",
             },
         }
 
@@ -204,13 +227,13 @@ class SetupWorkChain(WorkChain):
     def gromppmin(self):
         """Create a tpr for minimisation."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.gromppminparameters,
-            'mdpfile': self.inputs.minmdp,
-            'grofile': self.ctx.genion.outputs.grofile,
-            'topfile': self.ctx.genion.outputs.topfile,
-            'metadata': {
-                'description': 'prepare the tpr for minimisation run.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.gromppminparameters,
+            "mdpfile": self.inputs.minmdp,
+            "grofile": self.ctx.genion.outputs.grofile,
+            "topfile": self.ctx.genion.outputs.topfile,
+            "metadata": {
+                "description": "prepare the tpr for minimisation run.",
             },
         }
 
@@ -221,11 +244,11 @@ class SetupWorkChain(WorkChain):
     def minimise(self):
         """Minimise system."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.minimiseparameters,
-            'tprfile': self.ctx.gromppmin.outputs.tprfile,
-            'metadata': {
-                'description': 'minimise system.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.minimiseparameters,
+            "tprfile": self.ctx.gromppmin.outputs.tprfile,
+            "metadata": {
+                "description": "minimise system.",
             },
         }
 
@@ -236,14 +259,14 @@ class SetupWorkChain(WorkChain):
     def gromppnvt(self):
         """Create a tpr for NVT equilibration."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.gromppnvtparameters,
-            'mdpfile': self.inputs.nvtmdp,
-            'grofile': self.ctx.minimise.outputs.grofile,
-            'topfile': self.ctx.genion.outputs.topfile,
-            'itpfile': self.ctx.pdb2gmx.outputs.itpfile,
-            'metadata': {
-                'description': 'prepare the tpr for NVT equlibration.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.gromppnvtparameters,
+            "mdpfile": self.inputs.nvtmdp,
+            "grofile": self.ctx.minimise.outputs.grofile,
+            "topfile": self.ctx.genion.outputs.topfile,
+            "itpfile": self.ctx.pdb2gmx.outputs.itpfile,
+            "metadata": {
+                "description": "prepare the tpr for NVT equlibration.",
             },
         }
 
@@ -254,11 +277,11 @@ class SetupWorkChain(WorkChain):
     def nvtequilibrate(self):
         """NVT Equilibration of system."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.nvtparameters,
-            'tprfile': self.ctx.gromppnvt.outputs.tprfile,
-            'metadata': {
-                'description': 'NVT equilibrate system.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.nvtparameters,
+            "tprfile": self.ctx.gromppnvt.outputs.tprfile,
+            "metadata": {
+                "description": "NVT equilibrate system.",
             },
         }
 
@@ -269,14 +292,14 @@ class SetupWorkChain(WorkChain):
     def gromppnpt(self):
         """Create a tpr for NPT equilibration."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.gromppnptparameters,
-            'mdpfile': self.inputs.nptmdp,
-            'grofile': self.ctx.nvtequilibrate.outputs.grofile,
-            'topfile': self.ctx.genion.outputs.topfile,
-            'itpfile': self.ctx.pdb2gmx.outputs.itpfile,
-            'metadata': {
-                'description': 'prepare the tpr for NPT equlibration.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.gromppnptparameters,
+            "mdpfile": self.inputs.nptmdp,
+            "grofile": self.ctx.nvtequilibrate.outputs.grofile,
+            "topfile": self.ctx.genion.outputs.topfile,
+            "itpfile": self.ctx.pdb2gmx.outputs.itpfile,
+            "metadata": {
+                "description": "prepare the tpr for NPT equlibration.",
             },
         }
 
@@ -287,11 +310,11 @@ class SetupWorkChain(WorkChain):
     def nptequilibrate(self):
         """NPT Equilibration of system system."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.nptparameters,
-            'tprfile': self.ctx.gromppnpt.outputs.tprfile,
-            'metadata': {
-                'description': 'NPT equilibrate system.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.nptparameters,
+            "tprfile": self.ctx.gromppnpt.outputs.tprfile,
+            "metadata": {
+                "description": "NPT equilibrate system.",
             },
         }
 
@@ -302,14 +325,14 @@ class SetupWorkChain(WorkChain):
     def gromppprod(self):
         """Create a tpr for production run."""
         inputs = {
-            'code': self.inputs.local_code,
-            'parameters': self.inputs.gromppprodparameters,
-            'mdpfile': self.inputs.prodmdp,
-            'grofile': self.ctx.nptequilibrate.outputs.grofile,
-            'topfile': self.ctx.genion.outputs.topfile,
-            'itpfile': self.ctx.pdb2gmx.outputs.itpfile,
-            'metadata': {
-                'description': 'prepare the tpr for production run.',
+            "code": self.inputs.local_code,
+            "parameters": self.inputs.gromppprodparameters,
+            "mdpfile": self.inputs.prodmdp,
+            "grofile": self.ctx.nptequilibrate.outputs.grofile,
+            "topfile": self.ctx.genion.outputs.topfile,
+            "itpfile": self.ctx.pdb2gmx.outputs.itpfile,
+            "metadata": {
+                "description": "prepare the tpr for production run.",
             },
         }
 
@@ -320,20 +343,18 @@ class SetupWorkChain(WorkChain):
     def prodmd(self):
         """Run production MD"""
 
-        if 'remote_code' in self.inputs:
-
+        if "remote_code" in self.inputs:
             code = self.inputs.remote_code
 
         else:
-
             code = self.inputs.local_code
 
         inputs = {
-            'code': code,
-            'parameters': self.inputs.mdrunparameters,
-            'tprfile': self.ctx.gromppprod.outputs.tprfile,
-            'metadata': {
-                'description': 'Production MD.',
+            "code": code,
+            "parameters": self.inputs.mdrunparameters,
+            "tprfile": self.ctx.gromppprod.outputs.tprfile,
+            "metadata": {
+                "description": "Production MD.",
             },
         }
 
@@ -343,4 +364,4 @@ class SetupWorkChain(WorkChain):
 
     def result(self):
         """Results"""
-        self.out('result', self.ctx.prodmd.outputs.trrfile)
+        self.out("result", self.ctx.prodmd.outputs.trrfile)

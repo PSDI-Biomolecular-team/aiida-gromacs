@@ -6,15 +6,16 @@ Register data types via the "aiida.data" entry point in setup.json.
 
 # You can directly use or subclass aiida.orm.data.Data
 # or any other data type listed under 'verdi data'
-from voluptuous import Schema, Optional, Required
+from voluptuous import Required, Schema
+
 from aiida.orm import Dict
 
-# A subset of diff's command line options
+# A subset of genion command line options
 cmdline_options = {
-    Required('o', default='solvated_ions.gro'): str,
-    Required('pname', default='NA'): str,
-    Required('nname', default='CL'): str,
-    Required('neutral', default='true'): str,
+    Required("o", default="solvated_ions.gro"): str,
+    Required("pname", default="NA"): str,
+    Required("nname", default="CL"): str,
+    Required("neutral", default="true"): str,
 }
 
 
@@ -43,7 +44,7 @@ class GenionParameters(Dict):  # pylint: disable=too-many-ancestors
         dict = self.validate(dict)
         super().__init__(dict=dict, **kwargs)
 
-    def validate(self, parameters_dict):  # pylint: disable=no-self-use
+    def validate(self, parameters_dict):
         """Validate command line options.
 
         Uses the voluptuous package for validation. Find out about allowed keys using::
@@ -65,22 +66,21 @@ class GenionParameters(Dict):  # pylint: disable=too-many-ancestors
         :param type pdbfile: str
 
         """
-        cmdline = 'echo'
-        cmdline = cmdline + ' ' + 'SOL'
-        cmdline = cmdline + ' ' + '| gmx genion'
-        cmdline = cmdline + ' ' + ' -s ' + tprfile
-        cmdline = cmdline + ' ' + ' -p ' + topfile
+        cmdline = "echo"
+        cmdline = cmdline + " " + "SOL"
+        cmdline = cmdline + " " + "| gmx genion"
+        cmdline = cmdline + " " + " -s " + tprfile
+        cmdline = cmdline + " " + " -p " + topfile
 
         parameters = []
 
         parm_dict = self.get_dict()
 
-        for k in parm_dict.keys():
+        for key, value in parm_dict.items():
+            cmdline = cmdline + " -" + key + " " + value
 
-            cmdline = cmdline + ' -' + k + ' ' + parm_dict[k]
+        parameters.extend(["-c", cmdline])
 
-        parameters.extend(['-c', cmdline])
-        
         return [str(p) for p in parameters]
 
     def __str__(self):
@@ -93,5 +93,5 @@ class GenionParameters(Dict):  # pylint: disable=too-many-ancestors
 
         """
         string = super().__str__()
-        string += '\n' + str(self.get_dict())
+        string += "\n" + str(self.get_dict())
         return string

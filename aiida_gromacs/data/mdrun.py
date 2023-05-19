@@ -6,24 +6,25 @@ Register data types via the "aiida.data" entry point in setup.json.
 
 # You can directly use or subclass aiida.orm.data.Data
 # or any other data type listed under 'verdi data'
-from voluptuous import Schema, Optional, Required, All, Any
+from voluptuous import Optional, Required, Schema
+
 from aiida.orm import Dict
 
-# A subset of diff's command line options
+# A subset of mdrun command line options
 cmdline_options = {
-    Required('c', default='confout.gro'): str,
-    Required('e', default='energy.edr'): str,
-    Required('g', default='md.log'): str,
-    Required('o', default='trajectory.trr'): str,
-    Optional('bonded'): str,
-    Optional('cpo'): str,
-    Optional('nb'): str,
-    Optional('nstlist'): str,
-    Optional('ntmpi'): str,
-    Optional('ntomp'): str,
-    Optional('pin'): str,
-    Optional('pme'): str,
-    Optional('v'): str,
+    Required("c", default="confout.gro"): str,
+    Required("e", default="energy.edr"): str,
+    Required("g", default="md.log"): str,
+    Required("o", default="trajectory.trr"): str,
+    Optional("bonded"): str,
+    Optional("cpo"): str,
+    Optional("nb"): str,
+    Optional("nstlist"): str,
+    Optional("ntmpi"): str,
+    Optional("ntomp"): str,
+    Optional("pin"): str,
+    Optional("pme"): str,
+    Optional("v"): str,
 }
 
 
@@ -52,7 +53,7 @@ class MdrunParameters(Dict):  # pylint: disable=too-many-ancestors
         dict = self.validate(dict)
         super().__init__(dict=dict, **kwargs)
 
-    def validate(self, parameters_dict):  # pylint: disable=no-self-use
+    def validate(self, parameters_dict):
         """Validate command line options.
 
         Uses the voluptuous package for validation. Find out about allowed keys using::
@@ -76,14 +77,13 @@ class MdrunParameters(Dict):  # pylint: disable=too-many-ancestors
         """
         parameters = []
 
-        parameters.append('mdrun')
-        parameters.extend(['-s', tprfile])
+        parameters.append("mdrun")
+        parameters.extend(["-s", tprfile])
 
         parm_dict = self.get_dict()
 
-        for k in parm_dict.keys():
-
-            parameters.extend(['-' + k, parm_dict[k]])
+        for key, value in parm_dict.items():
+            parameters.extend(["-" + key, value])
 
         return [str(p) for p in parameters]
 
@@ -97,5 +97,5 @@ class MdrunParameters(Dict):  # pylint: disable=too-many-ancestors
 
         """
         string = super().__str__()
-        string += '\n' + str(self.get_dict())
+        string += "\n" + str(self.get_dict())
         return string

@@ -6,16 +6,17 @@ Register data types via the "aiida.data" entry point in setup.json.
 
 # You can directly use or subclass aiida.orm.data.Data
 # or any other data type listed under 'verdi data'
-from voluptuous import Schema, Optional, Required
+from voluptuous import Required, Schema
+
 from aiida.orm import Dict
 
-# A subset of diff's command line options
+# A subset of pdb2gmx command line options
 cmdline_options = {
-    Required('water', default='spce'): str,
-    Required('ff', default='oplsaa'): str,
-    Required('o', default='conf.gro'): str,
-    Required('p', default='topol.top'): str,
-    Required('i', default='posre.itp'): str,
+    Required("water", default="spce"): str,
+    Required("ff", default="oplsaa"): str,
+    Required("o", default="conf.gro"): str,
+    Required("p", default="topol.top"): str,
+    Required("i", default="posre.itp"): str,
 }
 
 
@@ -44,7 +45,7 @@ class Pdb2gmxParameters(Dict):  # pylint: disable=too-many-ancestors
         dict = self.validate(dict)
         super().__init__(dict=dict, **kwargs)
 
-    def validate(self, parameters_dict):  # pylint: disable=no-self-use
+    def validate(self, parameters_dict):
         """Validate command line options.
 
         Uses the voluptuous package for validation. Find out about allowed keys using::
@@ -68,14 +69,13 @@ class Pdb2gmxParameters(Dict):  # pylint: disable=too-many-ancestors
         """
         parameters = []
 
-        parameters.append('pdb2gmx')
-        parameters.extend(['-f', pdbfile])
+        parameters.append("pdb2gmx")
+        parameters.extend(["-f", pdbfile])
 
         parm_dict = self.get_dict()
 
-        for k in parm_dict.keys():
-
-            parameters.extend(['-' + k, parm_dict[k]])
+        for key, value in parm_dict.items():
+            parameters.extend(["-" + key, value])
 
         return [str(p) for p in parameters]
 
@@ -89,5 +89,5 @@ class Pdb2gmxParameters(Dict):  # pylint: disable=too-many-ancestors
 
         """
         string = super().__str__()
-        string += '\n' + str(self.get_dict())
+        string += "\n" + str(self.get_dict())
         return string

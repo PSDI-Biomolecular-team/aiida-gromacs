@@ -7,21 +7,22 @@ Helper functions for setting up
 Note: Point 2 is made possible by the fact that the ``diff`` executable is
 available in the PATH on almost any UNIX system.
 """
-import tempfile
 import shutil
-from aiida.orm import Computer, Code
-from aiida.common.exceptions import NotExistent
+import tempfile
 
-LOCALHOST_NAME = 'localhost'
+from aiida.common.exceptions import NotExistent
+from aiida.orm import Code, Computer
+
+LOCALHOST_NAME = "localhost"
 
 executables = {
-    'gromacs': 'gmx',
-    'bash': 'bash',
+    "gromacs": "gmx",
+    "bash": "bash",
 }
 
 
 def get_path_to_executable(executable):
-    """ Get path to local executable.
+    """Get path to local executable.
     :param executable: Name of executable in the $PATH variable
     :type executable: str
     :return: path to executable
@@ -29,8 +30,7 @@ def get_path_to_executable(executable):
     """
     path = shutil.which(executable)
     if path is None:
-        raise ValueError(
-            "'{}' executable not found in PATH.".format(executable))
+        raise ValueError(f"'{executable}' executable not found in PATH.")
     return path
 
 
@@ -54,11 +54,12 @@ def get_computer(name=LOCALHOST_NAME, workdir=None):
 
         computer = Computer(
             label=name,
-            description='localhost computer set up by gromacs plugin',
+            description="localhost computer set up by gromacs plugin",
             hostname=name,
             workdir=workdir,
-            transport_type='core.local',
-            scheduler_type='core.direct')
+            transport_type="core.local",
+            scheduler_type="core.direct",
+        )
         computer.store()
         computer.set_minimum_job_poll_interval(0.0)
         computer.configure()
@@ -73,17 +74,19 @@ def get_code(entry_point, computer):
     :param entry_point: Entry point of calculation plugin
     :param computer: (local) AiiDA computer
     :return: The code node
-    :rtype: :py:class:`aiida.orm.code.Code`
+    :rtype: :py:class:`aiida.orm.nodes.data.code.portable.PortableCode`
     """
 
     try:
         executable = executables[entry_point]
     except KeyError as exc:
         raise KeyError(
-            "Entry point '{}' not recognized. Allowed values: {}".format(
-                entry_point, list(executables.keys()))) from exc
+            f"Entry point '{entry_point}' not recognized. Allowed values: {list(executables.keys())}"
+        ) from exc
 
-    codes = Code.objects.find(filters={'label': executable})  # pylint: disable=no-member
+    codes = Code.objects.find(
+        filters={"label": executable}
+    )  # pylint: disable=no-member
     if codes:
         return codes[0]
 

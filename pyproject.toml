@@ -40,10 +40,11 @@ testing = [
 ]
 pre-commit = [
     "pre-commit~=2.2",
-    "pylint>=2.5.0,<2.9"
+    "pylint~=2.17.4"
 ]
 docs = [
     "sphinx",
+    "sphinx_rtd_theme",
     "sphinxcontrib-contentui",
     "sphinxcontrib-details-directive",
     "furo",
@@ -52,6 +53,12 @@ docs = [
 
 [project.scripts]
 launch = "aiida_gromacs.launch:cli"
+gmx_pdb2gmx = "aiida_gromacs.cli.pdb2gmx:cli"
+gmx_editconf = "aiida_gromacs.cli.editconf:cli"
+gmx_genion = "aiida_gromacs.cli.genion:cli"
+gmx_grompp = "aiida_gromacs.cli.grompp:cli"
+gmx_mdrun = "aiida_gromacs.cli.mdrun:cli"
+gmx_solvate = "aiida_gromacs.cli.solvate:cli"
 
 [project.entry-points."aiida.data"]
 "gromacs.pdb2gmx" = "aiida_gromacs.data.pdb2gmx:Pdb2gmxParameters"
@@ -82,9 +89,6 @@ launch = "aiida_gromacs.launch:cli"
 [project.entry-points."aiida.workflows"]
 "gromacs.setup" = "aiida_gromacs.workflows.simsetup:SetupWorkChain"
 
-[project.entry-points."aiida.cmdline.data"]
-"gromacs" = "aiida_gromacs.cli:data_cli"
-
 [tool.flit.module]
 name = "aiida_gromacs"
 
@@ -97,8 +101,8 @@ disable = [
     "invalid-name",
     "duplicate-code",
     # black compatibility
-    "C0330",
-    "C0326",
+    #"C0330",
+    #"C0326",
 ]
 
 [tool.pytest.ini_options]
@@ -128,7 +132,7 @@ legacy_tox_ini = """
 envlist = py38
 [testenv]
 usedevelop=True
-[testenv:py{38,39,310}]
+[testenv:py{38,39,310,311}]
 description = Run the test suite against a python version
 extras = testing
 setenv =
@@ -146,4 +150,3 @@ extras = docs
 commands = sphinx-build -nW --keep-going -b html {posargs} docs/source docs/build/html
 commands_post = echo "open file://{toxinidir}/docs/build/html/index.html"
 """
-

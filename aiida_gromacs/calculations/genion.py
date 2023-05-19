@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-GenionParameters = DataFactory('gromacs.genion')
+GenionParameters = DataFactory("gromacs.genion")
 
 
 class GenionCalculation(CalcJob):
@@ -51,8 +51,8 @@ class GenionCalculation(CalcJob):
         """
         codeinfo = CodeInfo()
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
-            tprfile=self.inputs.tprfile.filename,
-            topfile=self.inputs.topfile.filename)
+            tprfile=self.inputs.tprfile.filename, topfile=self.inputs.topfile.filename
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -61,11 +61,21 @@ class GenionCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.tprfile.uuid, self.inputs.tprfile.filename, self.inputs.tprfile.filename),
-            (self.inputs.topfile.uuid, self.inputs.topfile.filename, self.inputs.topfile.filename),
+            (
+                self.inputs.tprfile.uuid,
+                self.inputs.tprfile.filename,
+                self.inputs.tprfile.filename,
+            ),
+            (
+                self.inputs.topfile.uuid,
+                self.inputs.topfile.filename,
+                self.inputs.topfile.filename,
+            ),
         ]
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['o'],
-                                  self.inputs.topfile.filename]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["o"],
+            self.inputs.topfile.filename,
+        ]
 
         return calcinfo

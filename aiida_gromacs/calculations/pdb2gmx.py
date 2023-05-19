@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-Pdb2gmxParameters = DataFactory('gromacs.pdb2gmx')
+Pdb2gmxParameters = DataFactory("gromacs.pdb2gmx")
 
 
 class Pdb2gmxCalculation(CalcJob):
@@ -51,7 +51,8 @@ class Pdb2gmxCalculation(CalcJob):
         """
         codeinfo = CodeInfo()
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
-            pdbfile=self.inputs.pdbfile.filename)
+            pdbfile=self.inputs.pdbfile.filename
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -60,11 +61,17 @@ class Pdb2gmxCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.pdbfile.uuid, self.inputs.pdbfile.filename, self.inputs.pdbfile.filename),
+            (
+                self.inputs.pdbfile.uuid,
+                self.inputs.pdbfile.filename,
+                self.inputs.pdbfile.filename,
+            ),
         ]
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['o'],
-                                  self.inputs.parameters['p'],
-                                  self.inputs.parameters['i']]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["o"],
+            self.inputs.parameters["p"],
+            self.inputs.parameters["i"],
+        ]
 
         return calcinfo

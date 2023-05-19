@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-SolvateParameters = DataFactory('gromacs.solvate')
+SolvateParameters = DataFactory("gromacs.solvate")
 
 
 class SolvateCalculation(CalcJob):
@@ -51,8 +51,8 @@ class SolvateCalculation(CalcJob):
         """
         codeinfo = CodeInfo()
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
-            grofile=self.inputs.grofile.filename,
-            topfile=self.inputs.topfile.filename)
+            grofile=self.inputs.grofile.filename, topfile=self.inputs.topfile.filename
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -61,10 +61,21 @@ class SolvateCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.grofile.uuid, self.inputs.grofile.filename, self.inputs.grofile.filename), (self.inputs.topfile.uuid, self.inputs.topfile.filename, self.inputs.topfile.filename),
+            (
+                self.inputs.grofile.uuid,
+                self.inputs.grofile.filename,
+                self.inputs.grofile.filename,
+            ),
+            (
+                self.inputs.topfile.uuid,
+                self.inputs.topfile.filename,
+                self.inputs.topfile.filename,
+            ),
         ]
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['o'],
-                                  self.inputs.topfile.filename]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["o"],
+            self.inputs.topfile.filename,
+        ]
 
         return calcinfo

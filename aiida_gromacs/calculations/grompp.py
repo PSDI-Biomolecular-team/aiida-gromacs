@@ -8,7 +8,7 @@ from aiida.engine import CalcJob
 from aiida.orm import SinglefileData
 from aiida.plugins import DataFactory
 
-GromppParameters = DataFactory('gromacs.grompp')
+GromppParameters = DataFactory("gromacs.grompp")
 
 
 class GromppCalculation(CalcJob):
@@ -35,7 +35,7 @@ class GromppCalculation(CalcJob):
         spec.input('grofile', valid_type=SinglefileData, help='Input structure')
         spec.input('topfile', valid_type=SinglefileData, help='Input topology')
         spec.input('parameters', valid_type=GromppParameters, help='Command line parameters for gmx grompp')
-        
+
         spec.input('itpfile', valid_type=SinglefileData, required=False,help='Restraints file')
 
         spec.output('stdout', valid_type=SinglefileData, help='stdout')
@@ -55,7 +55,8 @@ class GromppCalculation(CalcJob):
         codeinfo.cmdline_params = self.inputs.parameters.cmdline_params(
             mdpfile=self.inputs.mdpfile.filename,
             grofile=self.inputs.grofile.filename,
-            topfile=self.inputs.topfile.filename)
+            topfile=self.inputs.topfile.filename,
+        )
         codeinfo.code_uuid = self.inputs.code.uuid
         codeinfo.stdout_name = self.metadata.options.output_filename
         codeinfo.withmpi = self.inputs.metadata.options.withmpi
@@ -64,14 +65,34 @@ class GromppCalculation(CalcJob):
         calcinfo = CalcInfo()
         calcinfo.codes_info = [codeinfo]
         calcinfo.local_copy_list = [
-            (self.inputs.mdpfile.uuid, self.inputs.mdpfile.filename, self.inputs.mdpfile.filename),
-            (self.inputs.grofile.uuid, self.inputs.grofile.filename, self.inputs.grofile.filename),
-            (self.inputs.topfile.uuid, self.inputs.topfile.filename, self.inputs.topfile.filename),
+            (
+                self.inputs.mdpfile.uuid,
+                self.inputs.mdpfile.filename,
+                self.inputs.mdpfile.filename,
+            ),
+            (
+                self.inputs.grofile.uuid,
+                self.inputs.grofile.filename,
+                self.inputs.grofile.filename,
+            ),
+            (
+                self.inputs.topfile.uuid,
+                self.inputs.topfile.filename,
+                self.inputs.topfile.filename,
+            ),
         ]
-        if 'itpfile' in self.inputs: calcinfo.local_copy_list.append((self.inputs.itpfile.uuid, self.inputs.itpfile.filename, self.inputs.itpfile.filename))
+        if "itpfile" in self.inputs:
+            calcinfo.local_copy_list.append(
+                (
+                    self.inputs.itpfile.uuid,
+                    self.inputs.itpfile.filename,
+                    self.inputs.itpfile.filename,
+                )
+            )
 
-        calcinfo.retrieve_list = [self.metadata.options.output_filename,
-                                  self.inputs.parameters['o'],
-                                  ]
+        calcinfo.retrieve_list = [
+            self.metadata.options.output_filename,
+            self.inputs.parameters["o"],
+        ]
 
         return calcinfo
