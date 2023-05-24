@@ -59,6 +59,9 @@ class MdrunParser(Parser):
             )
             return self.exit_codes.ERROR_MISSING_OUTPUT_FILES
 
+        with self.retrieved.base.repository.open("_scheduler-stderr.txt", "rb") as handle:
+             print(handle.read())
+
         # add outputs
         for index, thing in enumerate(files_expected):
             self.logger.info(f"Parsing '{thing}'")
