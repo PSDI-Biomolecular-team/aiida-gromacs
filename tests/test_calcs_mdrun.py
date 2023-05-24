@@ -44,8 +44,6 @@ def test_process(gromacs_code):
 
     result = run(CalculationFactory("gromacs.mdrun"), **inputs)
 
-    print(result["remote_folder"].listdir())
-
     assert "stdout" in result
     assert "trrfile" in result
     assert "grofile" in result
