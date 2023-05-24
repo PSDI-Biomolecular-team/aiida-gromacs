@@ -49,7 +49,7 @@ jobs:
 
     - name: Update all
       shell: bash -el {0}
-      run: conda update --all
+      run: conda update conda
 
     - name: Install GROMACS
       shell: bash -el {0}
