@@ -47,9 +47,13 @@ jobs:
         auto-activate-base: true
       name: Pull miniconda and autoactivate.
 
+    - name: Update all
+      shell: bash -el {0}
+      run: conda update --all
+
     - name: Install GROMACS
       shell: bash -el {0}
-      run: conda install -c conda-forge gromacs=2022.1
+      run: conda install -c conda-forge gromacs=2023.1
 
     - name: Install aiida-gromacs and dependencies
       shell: bash -el {0}
