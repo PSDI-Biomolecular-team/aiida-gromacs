@@ -42,6 +42,9 @@ def test_process(gromacs_code):
 
     result = run(CalculationFactory("gromacs.pdb2gmx"), **inputs)
 
+    import time
+    time.delay(60)
+
     assert "stdout" in result
     assert "grofile" in result
     assert "itpfile" in result

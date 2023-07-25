@@ -3,17 +3,17 @@
 """
 import os
 
-import pytest
-
 from aiida.engine import run
 from aiida.plugins import CalculationFactory, DataFactory
 
 from . import TEST_DIR
 
+# import pytest
 
-@pytest.mark.xfail(
-    reason="Strange issue with gromacs not writing the .gro, needs further investigation."
-)
+
+# @pytest.mark.xfail(
+#    reason="Strange issue with gromacs not writing the .gro, needs further investigation."
+# )
 def test_process(gromacs_code):
     """Test running a mdrun calculation.
     Note: this does not test that the expected outputs are created of output parsing"""
@@ -27,8 +27,8 @@ def test_process(gromacs_code):
             "g": "mdrun_1AKI_minimised.log",
             "o": "mdrun_1AKI_minimised.trr",
             "v": "true",
-            "ntomp": "5",
-            "ntmpi": "1",
+            # "ntomp": "5",
+            # "ntmpi": "1",
         }
     )
 
