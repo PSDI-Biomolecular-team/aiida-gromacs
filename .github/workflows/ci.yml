@@ -62,7 +62,7 @@ jobs:
         # show timings of tests
         PYTEST_ADDOPTS: "--durations=0"
       shell: bash -el {0}
-      run: pytest --cov aiida_gromacs --cov-report term-missing --cov-append .
+      run: pytest -s --cov aiida_gromacs --cov-report term-missing --cov-append .
 
     - name: Report Coverage
       uses: coverallsapp/github-action@v2
