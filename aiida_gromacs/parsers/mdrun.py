@@ -66,4 +66,8 @@ class MdrunParser(Parser):
                 output_node = SinglefileData(filename=thing, file=handle)
             self.out(outputs[index], output_node)
 
+        print(self.retrieved.base.repository.get_object_content('_scheduler-stderr.txt', 'r'))
+        print(self.retrieved.base.repository.get_object_content('_scheduler-stdout.txt', 'r'))
+        print(self.retrieved.base.repository.get_object_content('mdrun.out', 'r'))
+
         return ExitCode(0)
