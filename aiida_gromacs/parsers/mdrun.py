@@ -51,6 +51,7 @@ class MdrunParser(Parser):
         print(self.retrieved.base.repository.get_object_content('_scheduler-stderr.txt', 'r'))
         print(self.retrieved.base.repository.get_object_content('_scheduler-stdout.txt', 'r'))
         print(self.retrieved.base.repository.get_object_content('mdrun.out', 'r'))
+        print(self.retrieved.base.repository.get_object_content('mdrun_1AKI_minimised.log', 'r'))
 
         if "cpo" in self.node.inputs.parameters.keys():
             outputs.append("cptfile")
