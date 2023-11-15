@@ -32,12 +32,37 @@ def test_launch_mdrun():
             "1AKI_minimised.log",
             "-o",
             "1AKI_minimised.trr",
-            "-ntomp",
-            "5",
-            "-ntmpi",
-            "1",
         ]
     )
+    # append run process to qb
+    # pylint: disable=unused-variable
+    qb = searchprevious.build_query()
+    # check the process has completed first
+    # searchprevious.check_prev_process(qb)
+    # pylint: disable=unsubscriptable-object
+    prev_calc = qb.first()[0]
+
+    if prev_calc.exit_status != 0:
+        subprocess.check_output(
+            [
+                "gmx_mdrun",
+                "-s",
+                tpr_file,
+                "-c",
+                "1AKI_minimised.gro",
+                "-e",
+                "1AKI_minimised.edr",
+                "-g",
+                "1AKI_minimised.log",
+                "-o",
+                "1AKI_minimised.trr",
+                "-ntomp",
+                "5",
+                "-ntmpi",
+                "1",
+            ]
+        )
+
     # append run process to qb
     # pylint: disable=unused-variable
     qb = searchprevious.build_query()

@@ -9,7 +9,7 @@ from aiida.plugins import CalculationFactory, DataFactory
 from . import TEST_DIR
 
 
-def run_mdrun(gromacs_code):
+def run_mdrun(gromacs_code, parallel):
     """Run an instance of mdrun and return the results."""
 
     # Prepare input parameters
@@ -25,6 +25,10 @@ def run_mdrun(gromacs_code):
             "ntmpi": "1",
         }
     )
+
+    if parallel is True:
+        parameters["ntomp"] = "5"
+        parameters["ntmpi"] = "1"
 
     SinglefileData = DataFactory("core.singlefile")
     tprfile = SinglefileData(
@@ -50,7 +54,10 @@ def test_process(gromacs_code):
     """Test running a mdrun calculation.
     Note: this does not test that the expected outputs are created of output parsing"""
 
-    result = run_mdrun(gromacs_code)
+    result = run_mdrun(gromacs_code, False)
+
+    if "trrfile" not in result:
+        result = run_mdrun(gromacs_code, True)
 
     assert "stdout" in result
     assert "trrfile" in result
@@ -62,7 +69,10 @@ def test_process(gromacs_code):
 def test_file_name_match(gromacs_code):
     """Test that the file names returned match what was specified on inputs."""
 
-    result = run_mdrun(gromacs_code)
+    result = run_mdrun(gromacs_code, False)
+
+    if "trrfile" not in result:
+        result = run_mdrun(gromacs_code, True)
 
     assert result["stdout"].list_object_names()[0] == "mdrun.out"
     assert result["trrfile"].list_object_names()[0] == "mdrun_1AKI_minimised.trr"
