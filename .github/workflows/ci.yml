@@ -49,7 +49,7 @@ jobs:
 
     - name: Install GROMACS
       shell: bash -el {0}
-      run: conda install -c conda-forge 'gromacs=2022.3=mpi_openmpi_hc63aba2_0'
+      run: conda install -c conda-forge 'gromacs=2022.3=nompi_cuda_ha81c2ac_0'
 
     - name: Install aiida-gromacs and dependencies
       shell: bash -el {0}
