@@ -10,7 +10,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        container: [py3.11.0]
+        container: [ubuntu22.04-py3.10.13, ubuntu22.04-py3.11.7, ubuntu22.04-py3.12.1]
         aiida: [2.4.0, 2.4.1, 2.4.2, 2.5.0]
         gmx: [2023.1=nompi_h76c6bb2_100,
               2022.4=nompi_hca75aac_100]
