@@ -150,7 +150,7 @@ result = engine.run(CalculationFactory("genericMD"), **inputs)
 
 ## Outputs
 
-The data provenance of simulation protocols performed with the popular MD engine GROMACS [REF] are tracked and saved in a relational database. Inputs and outputs of commands can be represented as nodes in the graph and edges represent how data are connected (\autoref{fig:workflow}).
+The data provenance of simulation protocols are tracked and saved in a relational database. Inputs and outputs of commands can be represented as nodes in the graph and edges represent how data are connected (\autoref{fig1:workflow}).
 
 Along with data provenance collection, the automation of simulation metadata collection is also included in `aiida-gromacs`. Output log files are automatically parsed and all relevant metadata associated with each simulation command is saved in json formatted dictionaries that can subsequently be used to automatically populate databases and vastly improve searchability of simulation data.
 
